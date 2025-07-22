@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <div class="max-w-4xl mx-auto p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-3xl font-bold">Personal Expense Tracker</h1>
+            <a href="/logout" class="text-red-500 hover:underline">Logout</a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div class="bg-white p-4 rounded shadow">
+                <p class="text-gray-600">Total Spent:</p>
+                <p class="text-2xl font-semibold text-green-600">{{ currency }} {{ total }}</p>
+            </div>
+            <div class="bg-white p-4 rounded shadow">
+                <canvas id="expenseChart"></canvas>
+            </div>
+        </div>
+
+        <form action="/add" method="post" class="bg-white p-4 rounded shadow mb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input type="date" name="date" required class="p-2 border rounded w-full">
+                <input type="text" name="category" placeholder="Category" required class="p-2 border rounded w-full">
+                <input type="number" step="0.01" name="amount" placeholder="Amount" required class="p-2 border rounded w-full">
+                <input type="text" name="description" placeholder="Description" class="p-2 border rounded w-full">
+            </div>
+            <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Expense</button>
+        </form>
+
+        <table class="w-full table-auto bg-white rounded shadow">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="p-2 text-left">Date</th>
+                    <th class="p-2 text-left">Category</th>
+                    <th class="p-2 text-left">Amount</th>
+                    <th class="p-2 text-left">Description</th>
+                    <th class="p-2"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr class="border-t">
+                    <td class="p-2">{{ expense[2] }}</td>
+                    <td class="p-2">{{ expense[3] }}</td>
+                    <td class="p-2">{{ currency }} {{ "%.2f"|format(expense[4]) }}</td>
+                    <td class="p-2">{{ expense[5] }}</td>
+                    <td class="p-2">
+                        <a href="/delete/{{ expense[0] }}" class="text-red-500 hover:underline">Delete</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td class="p-2" colspan="5">No expenses added yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('expenseChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: {{ categories | tojson }},
+                datasets: [{
+                    label: 'Expenses by Category',
+                    data: {{ category_totals | tojson }},
+                    backgroundColor: ['#60a5fa', '#f87171', '#34d399', '#fbbf24', '#a78bfa', '#fb923c']
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+</body>
+</html>

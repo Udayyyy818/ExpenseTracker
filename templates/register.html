@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <form method="POST" class="bg-white p-8 rounded shadow-md w-full max-w-sm">
+        <h2 class="text-2xl font-bold mb-4">Register</h2>
+        <input type="text" name="username" placeholder="Username" required class="mb-4 p-2 border w-full rounded">
+        <input type="password" name="password" placeholder="Password" required class="mb-4 p-2 border w-full rounded">
+        <select name="currency" class="mb-4 p-2 border w-full rounded" required>
+            <option value="USD" selected>USD ($)</option>
+            <option value="INR">INR (₹)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="GBP">GBP (£)</option>
+        </select>
+        <button type="submit" class="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600">Register</button>
+        <p class="mt-4 text-sm text-gray-600">Already have an account? <a href="/login" class="text-blue-500 hover:underline">Login</a></p>
+    </form>
+</body>
+</html>
